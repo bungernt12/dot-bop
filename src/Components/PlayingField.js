@@ -14,6 +14,10 @@ const PlayingField = (props) => {
     props.setBopCount((prev) => (prev = prev + 1));
   };
 
+  const toggleGameRunning = () => {
+    props.setGameRunning((prev) => !prev);
+  };
+
   //   useEffect(() => {
   //     console.log("New dot location:", dotLocation);
   //     //whenever the dot location changes, I want the dotSide to update.
@@ -30,28 +34,36 @@ const PlayingField = (props) => {
         border: "1px solid black",
       }}
     >
-      <div
-        className="centerLine"
-        style={{
-          position: "absolute",
-          top: 250,
-          width: "100%",
-          height: 1,
-          border: "1px solid red",
-        }}
-      ></div>
-      <button
-        className="dot"
-        onClick={dotClickHandle}
-        style={{
-          position: "absolute",
-          top: `${dotLocation.top}px`,
-          left: `${dotLocation.left}px`,
-          backgroundColor: dotColor,
-        }}
-      >
-        :D
-      </button>
+      {props.gameRunning ? (
+        <div>
+          <div
+            className="centerLine"
+            style={{
+              position: "absolute",
+              top: 250,
+              width: "100%",
+              height: 1,
+              border: "1px solid red",
+            }}
+          ></div>
+          <button
+            className="dot"
+            onClick={dotClickHandle}
+            style={{
+              position: "absolute",
+              top: `${dotLocation.top}px`,
+              left: `${dotLocation.left}px`,
+              backgroundColor: dotColor,
+            }}
+          >
+            :D
+          </button>
+        </div>
+      ) : (
+        <button className="startButton" onClick={toggleGameRunning}>
+          Start Game
+        </button>
+      )}
     </div>
   );
 };

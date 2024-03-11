@@ -5,12 +5,24 @@ import { useState } from "react";
 
 function App() {
   const [bopCount, setBopCount] = useState(0);
+  const [gameRunning, setGameRunning] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
 
   return (
     <div className="App">
       <header className="App-header">
-        <ScoreBoard bopCount={bopCount} />
-        <PlayingField setBopCount={setBopCount} />
+        <ScoreBoard
+          bopCount={bopCount}
+          gameRunning={gameRunning}
+          setGameRunning={setGameRunning}
+          gameOver={gameOver}
+          setGameOver={setGameOver}
+        />
+        <PlayingField
+          setBopCount={setBopCount}
+          gameRunning={gameRunning}
+          setGameRunning={setGameRunning}
+        />
       </header>
     </div>
   );
