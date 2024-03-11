@@ -21,7 +21,7 @@ const ScoreBoard = ({ gameRunning, setGameOver, setGameRunning, bopCount }) => {
       setGameOver(true);
       setGameRunning(false);
     }
-  }, [gameRunning, timeLeft]); // Removed setGameOver and setGameRunning from the dependency array
+  }, [gameRunning, timeLeft, setGameOver, setGameRunning]); // Removed setGameOver and setGameRunning from the dependency array
 
   // Effect to reset the timer when the game starts
   useEffect(() => {
