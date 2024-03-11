@@ -1,30 +1,38 @@
 import React, { useState, useEffect } from "react";
 
-const ScoreBoard = ({ gameRunning, setGameOver, bopCount }) => {
+const ScoreBoard = ({ gameRunning, setGameOver, setGameRunning, bopCount }) => {
   const [timeLeft, setTimeLeft] = useState(20);
 
   useEffect(() => {
+    // No setup required if the game is not running
+    if (!gameRunning) return;
+
     // Only set up the interval if timeLeft is greater than 0
-    if ((timeLeft > 0) & gameRunning) {
-      // Set up a timer that runs every 1000 milliseconds (1 second)
+    if (timeLeft > 0) {
       const timerId = setInterval(() => {
-        // Decrement the time left by 1 second
         setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
       }, 1000);
-      if (timeLeft === 0) {
-        setGameOver(true);
-      }
 
-      // Clear the interval when the component unmounts or the timeLeft reaches 0
-      // This is a cleanup function that React will run on component unmount
+      // Clear the interval on cleanup
       return () => clearInterval(timerId);
+    } else {
+      // Handle the game over logic outside the interval and as a part of the effect
+      // This ensures it's not directly during rendering
+      setGameOver(true);
+      setGameRunning(false);
     }
-  }, [timeLeft, gameRunning, setGameOver]); // Dependency array, effect runs when timeLeft changes
+  }, [gameRunning, timeLeft]); // Removed setGameOver and setGameRunning from the dependency array
+
+  // Effect to reset the timer when the game starts
+  useEffect(() => {
+    if (gameRunning) {
+      setTimeLeft(20); // Reset timer to initial value when game starts
+    }
+  }, [gameRunning]);
 
   return (
     <div>
       <h3>Bops: {bopCount}</h3>
-      {/* Display the time left */}
       <h3>Time Left: {timeLeft} seconds</h3>
     </div>
   );

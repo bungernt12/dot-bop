@@ -16,6 +16,7 @@ const PlayingField = (props) => {
 
   const toggleGameRunning = () => {
     props.setGameRunning((prev) => !prev);
+    props.setBopCount(0);
   };
 
   //   useEffect(() => {
