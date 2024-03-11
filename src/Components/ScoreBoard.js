@@ -20,7 +20,7 @@ const ScoreBoard = (props) => {
 
   return (
     <div>
-      <h3>Bops: {props.bopCount}</h3>
+      <h3>Bops poop: {props.bopCount}</h3>
       {/* Display the time left */}
       <h3>Time Left: {timeLeft} seconds</h3>
     </div>
