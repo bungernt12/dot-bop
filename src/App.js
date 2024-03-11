@@ -1,22 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import PlayingField from "./Components/PlayingField";
+import ScoreBoard from "./Components/ScoreBoard";
+import { useState } from "react";
 
 function App() {
+  const [bopCount, setBopCount] = useState(0);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <ScoreBoard bopCount={bopCount} />
+        <PlayingField setBopCount={setBopCount} />
       </header>
     </div>
   );
