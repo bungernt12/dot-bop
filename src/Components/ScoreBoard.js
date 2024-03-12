@@ -25,7 +25,7 @@ const ScoreBoard = ({
     } else {
       // Handle the game over logic outside the interval and as a part of the effect
       // This ensures it's not directly during rendering
-      setTimeLeft(gameLength)
+      setTimeLeft(gameLength);
       setGameOver(true);
       setGameRunning(false);
     }
@@ -43,9 +43,10 @@ const ScoreBoard = ({
   // }, [gameRunning, bopCount, gameOver])
 
   return (
-    <div>
+    <div className="scoreBoard">
       <h3>Bops: {bopCount}</h3>
-      {gameRunning? <h3>Time Left: {timeLeft} seconds</h3> : <h3> </h3>}
+      <h3>Timer: {timeLeft}</h3>
+      {/* {gameRunning ? <h3>Timer: {timeLeft}</h3> : <h3> </h3>} */}
     </div>
   );
 };

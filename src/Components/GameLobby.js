@@ -1,11 +1,19 @@
-import React from "react"
+import React from "react";
 
 const GameLobby = (props) => {
   return (
-    <div>
-      Game Lobby Component
+    <div className="gameLobby">
+      <h3 className="gameLobbyTitle">
+        Bop Dot
+        <br />
+        {props.gameTitle}
+      </h3>
+      {/* <h3>Bops: {props.bopCount}</h3> */}
+      <button className="startButton" onClick={props.toggleGameRunning}>
+        Start Game
+      </button>
     </div>
-  )
+  );
 };
 
 export default GameLobby;

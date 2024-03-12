@@ -20,6 +20,7 @@ function CoOp() {
           gameLength={gameLength}
         />
         <PlayingField
+          bopCount={bopCount}
           setBopCount={setBopCount}
           gameRunning={gameRunning}
           setGameRunning={setGameRunning}

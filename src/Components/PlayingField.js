@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import GameLobby from "./GameLobby";
 
 const PlayingField = (props) => {
   const [dotLocation, setDotLocation] = useState({ top: 0, left: 0 });
@@ -19,11 +20,8 @@ const PlayingField = (props) => {
   };
 
   const toggleGameRunning = () => {
-    console.log("start game clicked1");
     props.setGameRunning((prev) => !prev);
-    console.log("start game clicked2");
     props.setBopCount(0);
-    console.log("start game clicked3");
   };
 
   useEffect(() => {
@@ -34,9 +32,9 @@ const PlayingField = (props) => {
 
   return (
     <div className="playingSquare">
-      <div className="centerLine"></div>
       {props.gameRunning ? (
         <div>
+          <div className="centerLine"></div>
           <button
             className="dot"
             onClick={dotClickHandle}
@@ -50,9 +48,11 @@ const PlayingField = (props) => {
           </button>
         </div>
       ) : (
-        <button className="startButton" onClick={toggleGameRunning}>
-          Start Game
-        </button>
+        <GameLobby
+          toggleGameRunning={toggleGameRunning}
+          gameTitle={"Co-Op"}
+          bopCount={props.bopCount}
+        />
       )}
     </div>
   );

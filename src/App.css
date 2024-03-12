@@ -19,6 +19,7 @@
   background-color: white;
   position: relative;
   border: 2px solid black;
+  border-radius: 35px;
 }
 
 .dot {
@@ -35,10 +36,31 @@
   top: 250px;
   width: 99.3%;
   height: 0px;
-  border: 1px solid red;
+  border: 1px solid black;
 }
 
 .modeButton {
-  background-color: red;
+  background-color: black;
   color: white;
+}
+
+.gameLobby {
+  color: white;
+  background-color: #282c34;
+  width: 80%;
+  height: auto;
+  margin: 100px auto;
+  border-radius: 35px;
+  border: 2px solid black;
+}
+
+.gameLobbyTitle {
+  margin-top: 0px;
+  margin-bottom: 20px;
+  font-size: 3rem;
+}
+
+.scoreBoard {
+  display: flex;
+  gap: 20px;
 }
