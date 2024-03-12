@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const ScoreBoard = ({
+  gameOver,
   gameRunning,
   setGameOver,
   setGameRunning,
@@ -24,22 +25,27 @@ const ScoreBoard = ({
     } else {
       // Handle the game over logic outside the interval and as a part of the effect
       // This ensures it's not directly during rendering
+      setTimeLeft(gameLength)
       setGameOver(true);
       setGameRunning(false);
     }
   }, [gameRunning, timeLeft, setGameOver, setGameRunning]); // Removed setGameOver and setGameRunning from the dependency array
 
   // Effect to reset the timer when the game starts
+  // useEffect(() => {
+  //   if (gameRunning) {
+  //     setTimeLeft(gameLength); // Reset timer to initial value when game starts
+  //   }
+  // }, [gameRunning, gameLength]);
+
   useEffect(() => {
-    if (gameRunning) {
-      setTimeLeft(gameLength); // Reset timer to initial value when game starts
-    }
-  }, [gameRunning, gameLength]);
+    console.log('test', bopCount, gameRunning, gameOver);
+  }, [gameRunning])
 
   return (
     <div>
       <h3>Bops: {bopCount}</h3>
-      <h3>Time Left: {timeLeft} seconds</h3>
+      {gameRunning? <h3>Time Left: {timeLeft} seconds</h3> : <h3> </h3>}
     </div>
   );
 };

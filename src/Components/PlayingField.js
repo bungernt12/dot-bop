@@ -34,9 +34,9 @@ const PlayingField = (props) => {
 
   return (
     <div className="playingSquare">
+      <div className="centerLine"></div>
       {props.gameRunning ? (
         <div>
-          <div className="centerLine"></div>
           <button
             className="dot"
             onClick={dotClickHandle}
