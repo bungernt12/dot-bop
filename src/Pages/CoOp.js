@@ -1,5 +1,5 @@
-import PlayingField from "./Components/PlayingField";
-import ScoreBoard from "./Components/ScoreBoard";
+import PlayingField from "./../Components/PlayingField";
+import ScoreBoard from "./../Components/ScoreBoard";
 import { useState } from "react";
 
 function CoOp() {
