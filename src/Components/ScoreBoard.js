@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-const ScoreBoard = ({ gameRunning, setGameOver, setGameRunning, bopCount }) => {
-  const [timeLeft, setTimeLeft] = useState(20);
+const ScoreBoard = ({
+  gameRunning,
+  setGameOver,
+  setGameRunning,
+  bopCount,
+  gameLength,
+}) => {
+  const [timeLeft, setTimeLeft] = useState(gameLength);
 
   useEffect(() => {
     // No setup required if the game is not running
@@ -26,9 +32,9 @@ const ScoreBoard = ({ gameRunning, setGameOver, setGameRunning, bopCount }) => {
   // Effect to reset the timer when the game starts
   useEffect(() => {
     if (gameRunning) {
-      setTimeLeft(20); // Reset timer to initial value when game starts
+      setTimeLeft(gameLength); // Reset timer to initial value when game starts
     }
-  }, [gameRunning]);
+  }, [gameRunning, gameLength]);
 
   return (
     <div>

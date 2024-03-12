@@ -1,57 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const PlayingField = (props) => {
   const [dotLocation, setDotLocation] = useState({ top: 0, left: 0 });
   const [dotColor, setDotColor] = useState("darkgreen");
-  //   const [dotSide, setDotSide] = useState("top");
+  const [dotSide, setDotSide] = useState("top");
 
   const dotClickHandle = () => {
     const squareSize = { width: 300, height: 500 };
-    const newTop = Math.random() * (squareSize.height - 50);
-    const newLeft = Math.random() * (squareSize.width - 50);
+    const newTop = Math.random() * (squareSize.height - 70);
+    if (newTop > 180 && newTop < 250) {
+      dotClickHandle();
+      return;
+    }
+    const newLeft = Math.random() * (squareSize.width - 70);
     setDotLocation({ top: newTop, left: newLeft });
     newTop > 225 ? setDotColor("darkcyan") : setDotColor("darkgreen");
     props.setBopCount((prev) => (prev = prev + 1));
   };
 
   const toggleGameRunning = () => {
+    console.log("start game clicked1");
     props.setGameRunning((prev) => !prev);
+    console.log("start game clicked2");
     props.setBopCount(0);
+    console.log("start game clicked3");
   };
 
-  //   useEffect(() => {
-  //     console.log("New dot location:", dotLocation);
-  //     //whenever the dot location changes, I want the dotSide to update.
-  //     dotLocation.top > 225 ? setDotSide("bottom") : setDotSide("top");
-  //   }, [dotLocation, dotSide]);
+  useEffect(() => {
+    // console.log("New dot location:", dotLocation);
+    //whenever the dot location changes, I want the dotSide to update.
+    dotLocation.top > 225 ? setDotSide("bottom") : setDotSide("top");
+  }, [dotLocation, dotSide]);
 
   return (
-    <div
-      className="playingSquare"
-      style={{
-        position: "relative",
-        width: "300px",
-        height: "500px",
-        border: "1px solid black",
-      }}
-    >
+    <div className="playingSquare">
       {props.gameRunning ? (
         <div>
-          <div
-            className="centerLine"
-            style={{
-              position: "absolute",
-              top: 250,
-              width: "100%",
-              height: 1,
-              border: "1px solid red",
-            }}
-          ></div>
+          <div className="centerLine"></div>
           <button
             className="dot"
             onClick={dotClickHandle}
             style={{
-              position: "absolute",
               top: `${dotLocation.top}px`,
               left: `${dotLocation.left}px`,
               backgroundColor: dotColor,

@@ -7,6 +7,7 @@ function App() {
   const [bopCount, setBopCount] = useState(0);
   const [gameRunning, setGameRunning] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const gameLength = 6;
 
   return (
     <div className="App">
@@ -17,11 +18,13 @@ function App() {
           setGameRunning={setGameRunning}
           gameOver={gameOver}
           setGameOver={setGameOver}
+          gameLength={gameLength}
         />
         <PlayingField
           setBopCount={setBopCount}
           gameRunning={gameRunning}
           setGameRunning={setGameRunning}
+          gameLength={gameLength}
         />
       </header>
     </div>
