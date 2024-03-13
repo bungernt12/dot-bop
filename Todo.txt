@@ -1,1 +1,5 @@
 - Get Game Lobby component hover over coop/playing field. put start game and game results to show up in game lobby.
+- add high score tracker
+- cosmetics
+    - add bop animation
+    - add random assortment of pop noises for each dot bop

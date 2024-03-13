@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import GameLobby from "./GameLobby";
+import bopSound from "./Bop-Sound.mp3";
 
 const PlayingField = (props) => {
   const [dotLocation, setDotLocation] = useState({ top: 0, left: 0 });
   const [dotColor, setDotColor] = useState("darkgreen");
   const [dotSide, setDotSide] = useState("top");
 
+  const bopSoundObj = new Audio(bopSound);
+
   const dotClickHandle = () => {
+    bopSoundObj.play();
+
     const squareSize = { width: 300, height: 500 };
     const newTop = Math.random() * (squareSize.height - 70);
     if (newTop > 180 && newTop < 250) {
