@@ -6,7 +6,7 @@ function CoOp() {
   const [bopCount, setBopCount] = useState(0);
   const [gameRunning, setGameRunning] = useState(false);
   const [gameOver, setGameOver] = useState(false);
-  const gameLength = 6;
+  const gameLength = 20;
 
   return (
     <div className="App">
