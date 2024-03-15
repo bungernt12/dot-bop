@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import GameLobby from "./GameLobby";
 import bopSound from "./Bop-Sound.mp3";
-import Dot from "./Dot";
+// import Dot from "./Dot";
 
 const PlayingField = (props) => {
   const [dotLocation, setDotLocation] = useState({ top: 0, left: 0 });
