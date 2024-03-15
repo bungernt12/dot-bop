@@ -11,6 +11,8 @@ const PlayingField = (props) => {
   const bopSoundObj = new Audio(bopSound);
 
   const dotClickHandle = () => {
+    console.log('clicked');
+    
     bopSoundObj.play();
 
     const squareSize = { width: 300, height: 500 };
@@ -30,7 +32,6 @@ const PlayingField = (props) => {
     props.setBopCount(0);
   };
 
-  
 
   useEffect(() => {
     // console.log("New dot location:", dotLocation);
@@ -45,7 +46,7 @@ const PlayingField = (props) => {
           <div className="centerLine"></div>
           <Dot
             className="dot"
-            onClick={dotClickHandle}
+            dotClickHandle={dotClickHandle}
             style={{
               top: `${dotLocation.top}px`,
               left: `${dotLocation.left}px`,
