@@ -43,7 +43,7 @@ const PlayingField = (props) => {
       {props.gameRunning ? (
         <div>
           <div className="centerLine"></div>
-          <Dot
+          {/* <Dot
             className="dot"
             onClick={dotClickHandle}
             style={{
@@ -51,8 +51,8 @@ const PlayingField = (props) => {
               left: `${dotLocation.left}px`,
               backgroundColor: dotColor,
             }}
-          />
-          {/* <button
+          /> */}
+          <button
             className="dot"
             onClick={dotClickHandle}
             style={{
@@ -62,7 +62,7 @@ const PlayingField = (props) => {
             }}
           >
             :D
-          </button> */}
+          </button>
         </div>
       ) : (
         <GameLobby
