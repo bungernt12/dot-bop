@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import GameLobby from "./GameLobby";
 import bopSound from "./Bop-Sound.mp3";
+// import Dot from "./Dot";
 
 const PlayingField = (props) => {
   const [dotLocation, setDotLocation] = useState({ top: 0, left: 0 });
@@ -29,6 +30,8 @@ const PlayingField = (props) => {
     props.setBopCount(0);
   };
 
+  
+
   useEffect(() => {
     // console.log("New dot location:", dotLocation);
     //whenever the dot location changes, I want the dotSide to update.
@@ -40,6 +43,15 @@ const PlayingField = (props) => {
       {props.gameRunning ? (
         <div>
           <div className="centerLine"></div>
+          {/* <Dot
+            className="dot"
+            onClick={dotClickHandle}
+            style={{
+              top: `${dotLocation.top}px`,
+              left: `${dotLocation.left}px`,
+              backgroundColor: dotColor,
+            }}
+          /> */}
           <button
             className="dot"
             onClick={dotClickHandle}

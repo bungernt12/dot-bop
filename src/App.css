@@ -24,11 +24,15 @@
 
 .dot {
   background-color: darkgreen;
-  color: white;
+  color: grey;
   width: 70px;
   height: 70px;
   border-radius: 35px;
   position: absolute;
+}
+
+.dotComponent {
+  color: grey;
 }
 
 .centerLine {
