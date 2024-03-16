@@ -9,6 +9,9 @@ const HomePage = (props) => {
       <Link to={'/CoOp'}>
         <div className="modeButton">Co-Op</div>
       </Link>
+      <Link to={'/Battle'}>
+        <div className="modeButton">Battle</div>
+      </Link>
     </div>
   )
 };

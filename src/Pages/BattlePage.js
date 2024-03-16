@@ -1,5 +1,5 @@
-import PlayingField from "./../Components/PlayingField";
-import ScoreBoard from "./../Components/ScoreBoard";
+import BattleGame from "../Components/BattleGame";
+import ScoreBoard from "../Components/ScoreBoard";
 import { useState } from "react";
 
 function CoOp() {
@@ -19,7 +19,7 @@ function CoOp() {
           setGameOver={setGameOver}
           gameLength={gameLength}
         />
-        <PlayingField
+        <BattleGame
           bopCount={bopCount}
           setBopCount={setBopCount}
           gameRunning={gameRunning}

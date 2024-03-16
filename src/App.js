@@ -1,5 +1,6 @@
 import "./App.css";
-import CoOp from "./Pages/CoOp";
+import CoOpPage from "./Pages/CoOpPage";
+import BattlePage from "./Pages/BattlePage";
 import HomePage from "./Pages/HomePage";
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 
@@ -8,7 +9,8 @@ function App() {
   const router = createBrowserRouter(createRoutesFromElements(
     <>
       <Route path="/" element={<HomePage />} />
-      <Route path="/CoOp" element={<CoOp />} />
+      <Route path="/CoOp" element={<CoOpPage />} />
+      <Route path="/Battle" element={<BattlePage />} />
     </>
   ))
 
