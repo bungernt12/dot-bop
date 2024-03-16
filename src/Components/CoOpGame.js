@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import GameLobby from "./GameLobby";
 import bopSound from "./Bop-Sound.mp3";
-// import Dot from "./Dot";
 
 const PlayingField = (props) => {
   const [dotLocation, setDotLocation] = useState({ top: 0, left: 0 });
   const [dotColor, setDotColor] = useState("darkgreen");
   const [dotSide, setDotSide] = useState("top");
+  const [coOpMode, setCoOpMode] = useState('Random')
 
   const bopSoundObj = new Audio(bopSound);
 
@@ -43,15 +43,6 @@ const PlayingField = (props) => {
       {props.gameRunning ? (
         <div>
           <div className="centerLine"></div>
-          {/* <Dot
-            className="dot"
-            onClick={dotClickHandle}
-            style={{
-              top: `${dotLocation.top}px`,
-              left: `${dotLocation.left}px`,
-              backgroundColor: dotColor,
-            }}
-          /> */}
           <button
             className="dot"
             onClick={dotClickHandle}
@@ -69,6 +60,8 @@ const PlayingField = (props) => {
           toggleGameRunning={toggleGameRunning}
           gameTitle={"Co-Op"}
           bopCount={props.bopCount}
+          coOpMode={coOpMode}
+          setGameMode={setCoOpMode}
         />
       )}
     </div>
