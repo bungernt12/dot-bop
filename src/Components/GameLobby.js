@@ -39,6 +39,12 @@ const GameLobby = (props) => {
             </label>
           </form>
         </div>
+      ) : !isNaN(props.greenReactionTime) ? (
+        <div>
+          <h4>Reaction Time Average:</h4>
+          <p>Green: {props.greenReactionTime.toFixed(2)} s</p>
+          <p>Blue: {props.blueReactionTime.toFixed(2)} s</p>
+        </div>
       ) : (
         ""
       )}
