@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import GameLobby from "./GameLobby";
 import bopSound from "./Bop-Sound.mp3";
 
@@ -19,7 +19,7 @@ const PlayingField = (props) => {
     return { top, left };
   });
   const [dotColor, setDotColor] = useState("darkgreen");
-  const [dotSide, setDotSide] = useState("top");
+  // const [dotSide, setDotSide] = useState("top");
 
   const bopSoundObj = new Audio(bopSound);
 
@@ -71,9 +71,9 @@ const PlayingField = (props) => {
     blueBopTracker = 0;
   };
 
-  useEffect(() => {
-    dotLocation.top > 225 ? setDotSide("bottom") : setDotSide("top");
-  }, [dotLocation]); // Removed `dotSide` from the dependency array to avoid unnecessary effect triggers
+  // useEffect(() => {
+  //   // dotLocation.top > 225 ? setDotSide("bottom") : setDotSide("top");
+  // }, [dotLocation]); // Removed `dotSide` from the dependency array to avoid unnecessary effect triggers
 
   return (
     <div className="playingRectangle">

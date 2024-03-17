@@ -14,7 +14,7 @@ const PlayingField = (props) => {
   const dotClickHandle = () => {
     bopSoundObj.play();
 
-    const oldTop = dotLocation.top;
+    // const oldTop = dotLocation.top;
 
     let newTop;
     let newLeft = Math.random() * (squareSize.width - 70);

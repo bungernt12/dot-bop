@@ -1,11 +1,10 @@
 import PatternSoloGame from "../Components/PatternSoloGame";
-import ScoreBoard from "../Components/ScoreBoard";
 import { useState } from "react";
 
 function CoOp() {
   const [bopCount, setBopCount] = useState(0);
   const [gameRunning, setGameRunning] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
+  // const [gameOver, setGameOver] = useState(false);
   const gameLength = 20;
 
   return (
