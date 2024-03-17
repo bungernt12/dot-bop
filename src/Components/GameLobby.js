@@ -1,6 +1,10 @@
 import React from "react";
 
 const GameLobby = (props) => {
+  const handleGameModeChange = (e) => {
+    props.setGameMode(e.target.value);
+  };
+
   return (
     <div className="gameLobby">
       <h3 className="gameLobbyTitle">
@@ -11,11 +15,25 @@ const GameLobby = (props) => {
       <h5>Co-Op Mode</h5>
       <form>
         <label>
-          <input type="radio" name="gameMode" value="Ping-Pong" />Ping-Pong 
+          <input
+            type="radio"
+            name="gameMode"
+            value="Ping-Pong"
+            checked={props.gameMode === "Ping-Pong"}
+            onChange={handleGameModeChange}
+          />
+          Ping-Pong
         </label>
-        <br/>
+        <br />
         <label>
-          <input type="radio" name="gameMode" value="Random" />Random
+          <input
+            type="radio"
+            name="gameMode"
+            value="Random"
+            checked={props.gameMode === "Random"}
+            onChange={handleGameModeChange}
+          />
+          Random
         </label>
       </form>
       {/* <h3>Bops: {props.bopCount}</h3> */}

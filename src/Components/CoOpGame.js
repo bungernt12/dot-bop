@@ -6,31 +6,45 @@ const PlayingField = (props) => {
   const [dotLocation, setDotLocation] = useState({ top: 0, left: 0 });
   const [dotColor, setDotColor] = useState("darkgreen");
   const [dotSide, setDotSide] = useState("top");
-  const [coOpMode, setCoOpMode] = useState('Random')
+  const [coOpMode, setCoOpMode] = useState("Random");
 
   const bopSoundObj = new Audio(bopSound);
+  const squareSize = { width: 300, height: 500 };
 
   const dotClickHandle = () => {
     bopSoundObj.play();
 
-    const squareSize = { width: 300, height: 500 };
-    const newTop = Math.random() * (squareSize.height - 70);
-    if (newTop > 180 && newTop < 250) {
-      dotClickHandle();
-      return;
+    const oldTop = dotLocation.top;
+
+    let newTop;
+    let newLeft = Math.random() * (squareSize.width - 70);
+
+    // Ensure the new position crosses the boundary for Ping-Pong mode
+    if (coOpMode === "Ping-Pong") {
+      do {
+        newTop = Math.random() * (squareSize.height - 70);
+      } while (
+        (oldTop <= 250 && newTop <= 250) ||
+        (oldTop > 250 && newTop > 250) ||
+        (newTop > 180 && newTop < 250)
+      );
+    } else {
+      // For non-Ping-Pong mode, simply find a new position that avoids the middle section
+      while (newTop > 180 && newTop < 250) {
+        newTop = Math.random() * (squareSize.height - 70);
+      }
     }
-    const newLeft = Math.random() * (squareSize.width - 70);
+
     setDotLocation({ top: newTop, left: newLeft });
     newTop > 225 ? setDotColor("darkcyan") : setDotColor("darkgreen");
-    props.setBopCount((prev) => (prev = prev + 1));
+    props.setBopCount((prev) => prev + 1);
   };
 
   const toggleGameRunning = () => {
     props.setGameRunning((prev) => !prev);
     props.setBopCount(0);
+    console.log(coOpMode);
   };
-
-  
 
   useEffect(() => {
     // console.log("New dot location:", dotLocation);
@@ -60,7 +74,7 @@ const PlayingField = (props) => {
           toggleGameRunning={toggleGameRunning}
           gameTitle={"Co-Op"}
           bopCount={props.bopCount}
-          coOpMode={coOpMode}
+          gameMode={coOpMode}
           setGameMode={setCoOpMode}
         />
       )}
