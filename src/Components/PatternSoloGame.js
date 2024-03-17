@@ -107,19 +107,33 @@ const squareSize = { width: 300, height: 500 };
 // };
 
 const PatternSoloPlayingField = (props) => {
+  const handleDotClick = () => {};
+
   return (
     <div className="playingRectangle simon">
       <div className="simonRow">
-        <div className="dot dotSimon"></div>
+        <div
+          className="dot dotSimon"
+          style={{ backgroundColor: "purple" }}
+        ></div>
       </div>
       <div className="simonRow">
-        <div className="dot dotSimon"></div>
-        <div className="dot dotSimon"></div>
+        <div
+          className="dot dotSimon"
+          style={{ backgroundColor: "green" }}
+        ></div>
+        <div className="dot dotSimon" style={{ backgroundColor: "blue" }}></div>
       </div>
       <div className="simonRow">
-        <div className="dot dotSimon"></div>
-        <div className="dot dotSimon"></div>
-        <div className="dot dotSimon"></div>
+        <div className="dot dotSimon" style={{ backgroundColor: "red" }}></div>
+        <div
+          className="dot dotSimon"
+          style={{ backgroundColor: "orange" }}
+        ></div>
+        <div
+          className="dot dotSimon"
+          style={{ backgroundColor: "yellow" }}
+        ></div>
       </div>
     </div>
   );
