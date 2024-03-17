@@ -24,7 +24,7 @@
 
 .dot {
   background-color: darkgreen;
-  color: grey;
+  color: white;
   width: 70px;
   height: 70px;
   border-radius: 35px;
@@ -53,15 +53,20 @@
   background-color: #282c34;
   width: 80%;
   height: auto;
-  margin: 100px auto;
+  margin: 70px auto;
   border-radius: 35px;
   border: 2px solid black;
+  padding: 10px;
 }
 
 .gameLobbyTitle {
   margin-top: 0px;
   margin-bottom: 20px;
   font-size: 3rem;
+}
+
+.startButton {
+  font-size: 2rem;
 }
 
 .scoreBoard {

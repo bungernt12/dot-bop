@@ -56,12 +56,12 @@ const GameLobby = (props) => {
         ""
       )}
       {/* <h3>Bops: {props.bopCount}</h3> */}
-      <div>
-        <button className="startButton" onClick={handleGoHome}>
-          Home Page
-        </button>
-      </div>
-      <button className="startButton" onClick={props.toggleGameRunning}>
+      <button className="goHomeButton button" onClick={handleGoHome}>
+        Home Page
+      </button>
+      <br />
+      <br />
+      <button className="startButton button" onClick={props.toggleGameRunning}>
         Start Game
       </button>
     </div>
