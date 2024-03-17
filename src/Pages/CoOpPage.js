@@ -2,6 +2,8 @@ import PlayingField from "../Components/CoOpGame";
 import ScoreBoard from "../Components/ScoreBoard";
 import { useState } from "react";
 
+document.body.style.overflow = "hidden";
+
 function CoOp() {
   const [bopCount, setBopCount] = useState(0);
   const [gameRunning, setGameRunning] = useState(false);

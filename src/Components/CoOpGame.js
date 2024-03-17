@@ -24,15 +24,14 @@ const PlayingField = (props) => {
       do {
         newTop = Math.random() * (squareSize.height - 70);
       } while (
-        (oldTop <= 250 && newTop <= 250) ||
-        (oldTop > 250 && newTop > 250) ||
+        (dotLocation.top <= 250 && newTop <= 250) ||
+        (dotLocation.top > 250 && newTop > 250) ||
         (newTop > 180 && newTop < 250)
       );
     } else {
-      // For non-Ping-Pong mode, simply find a new position that avoids the middle section
-      while (newTop > 180 && newTop < 250) {
+      do {
         newTop = Math.random() * (squareSize.height - 70);
-      }
+      } while (newTop > 180 && newTop < 250); // Avoids the middle section only for non-Ping-Pong mode
     }
 
     setDotLocation({ top: newTop, left: newLeft });
