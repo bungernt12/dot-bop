@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import GameLobby from "./GameLobby";
 import bopSound from "./Bop-Sound.mp3";
 
+const squareSize = { width: 300, height: 500 };
+
 const PlayingField = (props) => {
   const [dotLocation, setDotLocation] = useState({ top: 0, left: 0 });
   const [dotColor, setDotColor] = useState("darkgreen");
@@ -12,28 +14,29 @@ const PlayingField = (props) => {
   const dotClickHandle = () => {
     bopSoundObj.play();
 
-    const squareSize = { width: 300, height: 500 };
-    const newTop = Math.random() * (squareSize.height - 70);
-    if (newTop > 180 && newTop < 250) {
-      dotClickHandle();
-      return;
-    }
-    const newLeft = Math.random() * (squareSize.width - 70);
+    let newTop, newLeft;
+    do {
+      newTop = Math.random() * (squareSize.height - 70);
+      newLeft = Math.random() * (squareSize.width - 70);
+    } while (
+      (dotLocation.top <= 250 && newTop <= 250) ||
+      (dotLocation.top > 250 && newTop > 250) ||
+      (newTop > 180 && newTop < 250)
+    );
+
     setDotLocation({ top: newTop, left: newLeft });
     newTop > 225 ? setDotColor("darkcyan") : setDotColor("darkgreen");
-    props.setBopCount((prev) => (prev = prev + 1));
+    props.setBopCount((prev) => prev + 1);
   };
 
   const toggleGameRunning = () => {
     props.setGameRunning((prev) => !prev);
-    props.setBopCount(0);
+    props.setBopCount(0); // Reset bop count when toggling game running state
   };
 
   useEffect(() => {
-    // console.log("New dot location:", dotLocation);
-    //whenever the dot location changes, I want the dotSide to update.
     dotLocation.top > 225 ? setDotSide("bottom") : setDotSide("top");
-  }, [dotLocation, dotSide]);
+  }, [dotLocation]); // Removed `dotSide` from the dependency array to avoid unnecessary effect triggers
 
   return (
     <div className="playingSquare">
@@ -55,7 +58,7 @@ const PlayingField = (props) => {
       ) : (
         <GameLobby
           toggleGameRunning={toggleGameRunning}
-          gameTitle={"Battle"}
+          gameTitle="Battle"
           bopCount={props.bopCount}
         />
       )}
