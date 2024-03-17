@@ -1,8 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const GameLobby = (props) => {
   const handleGameModeChange = (e) => {
     props.setGameMode(e.target.value);
+  };
+
+  const navigate = useNavigate();
+
+  const handleGoHome = () => {
+    navigate("/");
   };
 
   return (
@@ -49,6 +56,11 @@ const GameLobby = (props) => {
         ""
       )}
       {/* <h3>Bops: {props.bopCount}</h3> */}
+      <div>
+        <button className="startButton" onClick={handleGoHome}>
+          Home Page
+        </button>
+      </div>
       <button className="startButton" onClick={props.toggleGameRunning}>
         Start Game
       </button>
