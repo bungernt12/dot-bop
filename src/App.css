@@ -13,7 +13,7 @@
   color: white;
 }
 
-.playingSquare {
+.playingRectangle {
   width: 300px;
   height: 500px;
   background-color: white;
@@ -28,11 +28,26 @@
   width: 70px;
   height: 70px;
   border-radius: 35px;
+}
+
+.dotBop {
   position: absolute;
 }
 
-.dotComponent {
-  color: grey;
+.playingRectangle.simon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.simonRow {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.dotSimon {
+  position: relative;
 }
 
 .centerLine {

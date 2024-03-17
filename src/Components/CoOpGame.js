@@ -52,12 +52,12 @@ const PlayingField = (props) => {
   }, [dotLocation, dotSide]);
 
   return (
-    <div className="playingSquare">
+    <div className="playingRectangle">
       {props.gameRunning ? (
         <div>
           <div className="centerLine"></div>
           <button
-            className="dot"
+            className="dot dotBop"
             onClick={dotClickHandle}
             style={{
               top: `${dotLocation.top}px`,

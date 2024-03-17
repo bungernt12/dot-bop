@@ -76,12 +76,12 @@ const PlayingField = (props) => {
   }, [dotLocation]); // Removed `dotSide` from the dependency array to avoid unnecessary effect triggers
 
   return (
-    <div className="playingSquare">
+    <div className="playingRectangle">
       {props.gameRunning ? (
         <div>
           <div className="centerLine"></div>
           <button
-            className="dot"
+            className="dot dotBop"
             onClick={dotClickHandle}
             style={{
               top: `${dotLocation.top}px`,
