@@ -48,13 +48,36 @@ const PatternSoloPlayingField = () => {
     playAndActivateDot(pitch);
   };
 
-  const generateAndPlayRandomSequence = (seqLength) => {
+  // const generateAndPlayRandomSequence = (seqLength) => {
+  //   const flattenedDots = dotConfig.flat(2);
+  //   for (let i = 0; i < seqLength; i++) {
+  //     const randomDotIndex = Math.floor(Math.random() * flattenedDots.length);
+  //     setTimeout(() => playAndActivateDot(flattenedDots[randomDotIndex].pitch), i * 500);
+  //   }
+  // };
+
+    //1. add note to challengeSequence
+  //2. listen to see if userEnteredSequence is the same as challengeSequence
+  //3. repeat
+  const [challengeSequence, setChallengeSequence] = useState([0])
+  const userEnteredSequence = []
+
+  const  addNoteToChallengeSequenceAndActivateDot = () => {
     const flattenedDots = dotConfig.flat(2);
-    for (let i = 0; i < seqLength; i++) {
-      const randomDotIndex = Math.floor(Math.random() * flattenedDots.length);
-      setTimeout(() => playAndActivateDot(flattenedDots[randomDotIndex].pitch), i * 500);
-    }
+    const randomDotIndex = Math.floor(Math.random() * flattenedDots.length);
+    setChallengeSequence((prev) => [...prev, randomDotIndex])
+    challengeSequence.forEach((challengeDot, iterationIndex) => {
+      setTimeout(() => playAndActivateDot(flattenedDots[challengeDot].pitch), iterationIndex * 500)
+    })
   };
+
+  const startSimonPatternGame = () => {
+    addNoteToChallengeSequenceAndActivateDot();
+    //play challenge sequence
+    console.log(challengeSequence)
+    // with every click, check to see if the user entered sequence 
+    //matches the challenge sequence up to that point.
+  }
 
   return (
     <div className="playingRectangle simon">
@@ -70,7 +93,7 @@ const PatternSoloPlayingField = () => {
           ))}
         </div>
       ))}
-      <button className="testButton" onClick={() => generateAndPlayRandomSequence(6)}>Test Pattern</button>
+      <button className="testButton" onClick={() => startSimonPatternGame()}>Test Generate Challenge</button>
     </div>
   );
 };
