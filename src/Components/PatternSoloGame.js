@@ -37,6 +37,16 @@ const PatternSoloPlayingField = (props) => {
     playNote(pitch, rowIndex, dotIndex);
   };
 
+    //make a random pattern generator for the function above to play
+    const generateRandomSequence = (seqLength) => {
+      const randomSequence = []
+      for (let i = 0; i < seqLength; i++) {
+        const nextNumber = Math.floor(Math.random() * 6);
+        randomSequence.push(nextNumber);
+      }
+      console.log(randomSequence);
+    }
+
   const handleTestPattern = () => {
     // Define your pattern: for example, the first dot of each row
     const pattern = [dotConfig[0][0], dotConfig[1][0], dotConfig[2][0]];
@@ -49,7 +59,13 @@ const PatternSoloPlayingField = (props) => {
       const dotIndex = 0; // Assuming each note is the first in its row for simplicity
       setTimeout(() => playNote(pitch, rowIndex, dotIndex), delay);
     });
+
+    generateRandomSequence(6);
   };
+
+
+  
+  //make some kind of listener to play a note and see if plays back the right note
 
   return (
     <div className="playingRectangle simon">
