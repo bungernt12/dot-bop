@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import * as Tone from "tone";
 
 const synth = new Tone.Synth().toDestination();
 
-// Realign dotConfig for the correct visual orientation
 const dotConfig = [
   [
     { color: "red", pitch: "C4" },
@@ -19,65 +18,80 @@ const dotConfig = [
 
 const PatternSoloPlayingField = () => {
   const [activeDots, setActiveDots] = useState({});
+  const [challengePlaying, setChallengePlaying] = useState(false);
+  const [challengeSequence, setChallengeSequence] = useState([]);
+  const [userEnteredSequence, setUserEnteredSequence] = useState([]);
 
-  // Function to toggle a dot's active state
-  const toggleDotActive = (rowIndex, dotIndex, isActive) => {
+  const toggleDotActive = useCallback((rowIndex, dotIndex, isActive) => {
     const dotKey = `${rowIndex}-${dotIndex}`;
     setActiveDots(prevState => ({ ...prevState, [dotKey]: isActive }));
-  };
+  }, []);
 
-  // Plays a note and activates the corresponding dot visually
-  const playAndActivateDot = (pitch) => {
-    // Iterates over each row and dot to find the one with the matching pitch
+  const playAndActivateDot = useCallback((pitch) => {
     dotConfig.some((row, rowIndex) => row.some((dot, dotIndex) => {
       if (dot.pitch === pitch) {
-        // Found the dot, now activate it visually
         toggleDotActive(rowIndex, dotIndex, true);
-        // Play the corresponding note with the Tone.js synthesizer
         synth.triggerAttackRelease(pitch, "32n");
-        // Schedule deactivation of the dot's visual activation after a delay
         setTimeout(() => toggleDotActive(rowIndex, dotIndex, false), 200);
-        return true; // Stop the search as we've found and processed the dot
+        return true;
       }
       return false;
     }));
-  };
+  }, [toggleDotActive]);
 
-  const handleDotActivate = (rowIndex, dotIndex) => {
-    const { pitch } = dotConfig[rowIndex][dotIndex];
-    playAndActivateDot(pitch);
-  };
+  const handleDotActivate = useCallback((rowIndex, dotIndex) => {
+    if (challengePlaying) return; // Ignore clicks while challenge is playing
+    const dot = dotConfig[rowIndex][dotIndex];
+    playAndActivateDot(dot.pitch);
+    if (!challengePlaying) {
+      setUserEnteredSequence(prev => [...prev, dotConfig.flat(2).indexOf(dot)]);
+      // for some reason the first dot click isn't added to the userEnteredSequence
+      console.log(userEnteredSequence);
+    }
+  }, [challengePlaying, playAndActivateDot, userEnteredSequence]);
 
-  // const generateAndPlayRandomSequence = (seqLength) => {
-  //   const flattenedDots = dotConfig.flat(2);
-  //   for (let i = 0; i < seqLength; i++) {
-  //     const randomDotIndex = Math.floor(Math.random() * flattenedDots.length);
-  //     setTimeout(() => playAndActivateDot(flattenedDots[randomDotIndex].pitch), i * 500);
-  //   }
-  // };
+  useEffect(() => {
+    console.log(userEnteredSequence);
+  }, [userEnteredSequence])
 
-    //1. add note to challengeSequence
-  //2. listen to see if userEnteredSequence is the same as challengeSequence
-  //3. repeat
-  const [challengeSequence, setChallengeSequence] = useState([0])
-  const userEnteredSequence = []
+  const addChallengeNoteAndPlay = useCallback(() => {
+    const randomDotIndex = Math.floor(Math.random() * dotConfig.flat(2).length);
+    const updatedSequence = [...challengeSequence, randomDotIndex];
+    setChallengeSequence(updatedSequence);
 
-  const  addNoteToChallengeSequenceAndActivateDot = () => {
-    const flattenedDots = dotConfig.flat(2);
-    const randomDotIndex = Math.floor(Math.random() * flattenedDots.length);
-    setChallengeSequence((prev) => [...prev, randomDotIndex])
-    challengeSequence.forEach((challengeDot, iterationIndex) => {
-      setTimeout(() => playAndActivateDot(flattenedDots[challengeDot].pitch), iterationIndex * 500)
-    })
-  };
+    updatedSequence.forEach((index, iterationIndex) => {
+      setTimeout(() => {
+        const dot = dotConfig.flat(2)[index];
+        playAndActivateDot(dot.pitch);
+      }, iterationIndex * 500);
+    });
 
-  const startSimonPatternGame = () => {
-    addNoteToChallengeSequenceAndActivateDot();
-    //play challenge sequence
-    console.log(challengeSequence)
-    // with every click, check to see if the user entered sequence 
-    //matches the challenge sequence up to that point.
-  }
+    setTimeout(() => {
+      setChallengePlaying(false);
+      setUserEnteredSequence([]);
+    }, updatedSequence.length * 500 + 500);
+  }, [challengeSequence, playAndActivateDot]);
+
+  const startGame = useCallback(() => {
+    setChallengePlaying(true);
+    setChallengeSequence([]);
+    setUserEnteredSequence([]);
+    addChallengeNoteAndPlay();
+  }, [addChallengeNoteAndPlay]);
+
+  // Check user sequence against the challenge sequence
+  useEffect(() => {
+    if (challengePlaying && userEnteredSequence.length) {
+      const isMatch = userEnteredSequence.every((val, index) => val === challengeSequence[index]);
+      if (!isMatch || userEnteredSequence.length === challengeSequence.length) {
+        setChallengePlaying(false);
+        if (!isMatch) alert('Sequence incorrect. Try again!');
+        if (userEnteredSequence.length === challengeSequence.length) alert('Correct! Starting new challenge.');
+        setUserEnteredSequence([]);
+        setChallengeSequence([]); // Optionally clear or expand for the next challenge
+      }
+    }
+  }, [userEnteredSequence, challengeSequence, challengePlaying]);
 
   return (
     <div className="playingRectangle simon">
@@ -85,7 +99,7 @@ const PatternSoloPlayingField = () => {
         <div key={rowIndex} className="simonRow">
           {row.map((dot, dotIndex) => (
             <div
-              key={dotIndex}
+              key={`${rowIndex}-${dotIndex}`}
               className="dot dotSimon"
               style={{ filter: activeDots[`${rowIndex}-${dotIndex}`] ? 'brightness(50%)' : 'none', backgroundColor: dot.color }}
               onClick={() => handleDotActivate(rowIndex, dotIndex)}
@@ -93,7 +107,9 @@ const PatternSoloPlayingField = () => {
           ))}
         </div>
       ))}
-      <button className="testButton" onClick={() => startSimonPatternGame()}>Test Generate Challenge</button>
+      {!challengePlaying && (
+        <button className="testButton" onClick={startGame}>Start Game</button>
+      )}
     </div>
   );
 };
