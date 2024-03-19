@@ -40,7 +40,7 @@
   justify-content: center;
 }
 
-.simonContainer {
+.simonDotContainer {
   display: flex;
   flex-direction: column-reverse;
   justify-content: center;

@@ -3,63 +3,61 @@ import * as Tone from "tone";
 
 const synth = new Tone.Synth().toDestination();
 
-// Redefine dotConfig in the desired order
+// Realign dotConfig for the correct visual orientation
 const dotConfig = [
-  // Start with colors in the order red, orange, yellow
   [
     { color: "red", pitch: "C4" },
     { color: "orange", pitch: "D4" },
     { color: "yellow", pitch: "E4" },
   ],
-  // Then green and blue
   [
     { color: "green", pitch: "G4" },
     { color: "blue", pitch: "A4" },
   ],
-  // Finally, purple
   [{ color: "purple", pitch: "C5" }],
 ];
 
-const PatternSoloPlayingField = (props) => {
+const PatternSoloPlayingField = () => {
   const [activeDots, setActiveDots] = useState({});
 
-  const playNote = (pitch, rowIndex, dotIndex) => {
-    synth.triggerAttackRelease(pitch, "32n");
+  // Function to toggle a dot's active state
+  const toggleDotActive = (rowIndex, dotIndex, isActive) => {
     const dotKey = `${rowIndex}-${dotIndex}`;
-    setActiveDots(prevState => ({...prevState, [dotKey]: true}));
-    
-    setTimeout(() => {
-      setActiveDots(prevState => ({...prevState, [dotKey]: false}));
-    }, 200);
+    setActiveDots(prevState => ({ ...prevState, [dotKey]: isActive }));
   };
 
-  const handleDotClick = (pitch, rowIndex, dotIndex) => {
-    playNote(pitch, rowIndex, dotIndex);
+  // Plays a note and activates the corresponding dot visually
+  const playAndActivateDot = (pitch) => {
+    // Iterates over each row and dot to find the one with the matching pitch
+    dotConfig.some((row, rowIndex) => row.some((dot, dotIndex) => {
+      if (dot.pitch === pitch) {
+        // Found the dot, now activate it visually
+        toggleDotActive(rowIndex, dotIndex, true);
+        // Play the corresponding note with the Tone.js synthesizer
+        synth.triggerAttackRelease(pitch, "32n");
+        // Schedule deactivation of the dot's visual activation after a delay
+        setTimeout(() => toggleDotActive(rowIndex, dotIndex, false), 200);
+        return true; // Stop the search as we've found and processed the dot
+      }
+      return false;
+    }));
   };
 
-  const generateRandomSequence = (seqLength) => {
-    const flattenedDots = dotConfig.flat();
-    const randomSequence = Array.from({ length: seqLength }, () => Math.floor(Math.random() * flattenedDots.length));
-    const randomSequenceToDotConfig = randomSequence.map(index => flattenedDots[index]);
-
-    console.log("Random Sequence:", randomSequence);
-    console.log("Mapped to DotConfig:", randomSequenceToDotConfig);
-  
-    // Optionally, play the random sequence
-    randomSequenceToDotConfig.forEach((dot, index) => {
-      setTimeout(() => playNote(dot.pitch, 0, 0), index * 500); // Assuming pitch is enough to play the note
-    });
-
-    return randomSequenceToDotConfig; // Return this if needed
+  const handleDotActivate = (rowIndex, dotIndex) => {
+    const { pitch } = dotConfig[rowIndex][dotIndex];
+    playAndActivateDot(pitch);
   };
 
-  const handleTestPattern = () => {
-    generateRandomSequence(6);
+  const generateAndPlayRandomSequence = (seqLength) => {
+    const flattenedDots = dotConfig.flat(2);
+    for (let i = 0; i < seqLength; i++) {
+      const randomDotIndex = Math.floor(Math.random() * flattenedDots.length);
+      setTimeout(() => playAndActivateDot(flattenedDots[randomDotIndex].pitch), i * 500);
+    }
   };
 
   return (
     <div className="playingRectangle simon">
-      <div className="simonContainer">
       {dotConfig.map((row, rowIndex) => (
         <div key={rowIndex} className="simonRow">
           {row.map((dot, dotIndex) => (
@@ -67,13 +65,12 @@ const PatternSoloPlayingField = (props) => {
               key={dotIndex}
               className="dot dotSimon"
               style={{ filter: activeDots[`${rowIndex}-${dotIndex}`] ? 'brightness(50%)' : 'none', backgroundColor: dot.color }}
-              onClick={() => handleDotClick(dot.pitch, rowIndex, dotIndex)}
+              onClick={() => handleDotActivate(rowIndex, dotIndex)}
             ></div>
           ))}
         </div>
       ))}
-      </div>
-      <button className="testButton" onClick={handleTestPattern}>Test Pattern</button>
+      <button className="testButton" onClick={() => generateAndPlayRandomSequence(6)}>Test Pattern</button>
     </div>
   );
 };
