@@ -48,6 +48,14 @@
 
 .dotSimon {
   position: relative;
+  border: 2px solid rgb(44, 44, 44);
+}
+
+.testButton {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  margin: 10px;
 }
 
 .centerLine {
