@@ -3,72 +3,63 @@ import * as Tone from "tone";
 
 const synth = new Tone.Synth().toDestination();
 
+// Redefine dotConfig in the desired order
 const dotConfig = [
-  [{ color: "purple", pitch: "C5" }], // First row
-  [
-    { color: "green", pitch: "G4" },
-    { color: "blue", pitch: "A4" },
-  ], // Second row
+  // Start with colors in the order red, orange, yellow
   [
     { color: "red", pitch: "C4" },
     { color: "orange", pitch: "D4" },
     { color: "yellow", pitch: "E4" },
-  ], // Third row
+  ],
+  // Then green and blue
+  [
+    { color: "green", pitch: "G4" },
+    { color: "blue", pitch: "A4" },
+  ],
+  // Finally, purple
+  [{ color: "purple", pitch: "C5" }],
 ];
 
 const PatternSoloPlayingField = (props) => {
   const [activeDots, setActiveDots] = useState({});
 
   const playNote = (pitch, rowIndex, dotIndex) => {
-    // Play the note
     synth.triggerAttackRelease(pitch, "32n");
-    
-    // Activate the dot visually
     const dotKey = `${rowIndex}-${dotIndex}`;
     setActiveDots(prevState => ({...prevState, [dotKey]: true}));
     
-    // Set a timeout to deactivate the dot visually
     setTimeout(() => {
       setActiveDots(prevState => ({...prevState, [dotKey]: false}));
-    }, 200); // Adjust the timing as needed
+    }, 200);
   };
 
   const handleDotClick = (pitch, rowIndex, dotIndex) => {
     playNote(pitch, rowIndex, dotIndex);
   };
 
-    //make a random pattern generator for the function above to play
-    const generateRandomSequence = (seqLength) => {
-      const randomSequence = []
-      for (let i = 0; i < seqLength; i++) {
-        const nextNumber = Math.floor(Math.random() * 6);
-        randomSequence.push(nextNumber);
-      }
-      console.log(randomSequence);
-    }
+  const generateRandomSequence = (seqLength) => {
+    const flattenedDots = dotConfig.flat();
+    const randomSequence = Array.from({ length: seqLength }, () => Math.floor(Math.random() * flattenedDots.length));
+    const randomSequenceToDotConfig = randomSequence.map(index => flattenedDots[index]);
 
-  const handleTestPattern = () => {
-    // Define your pattern: for example, the first dot of each row
-    const pattern = [dotConfig[0][0], dotConfig[1][0], dotConfig[2][0]];
-    
-    // Play each note in the pattern with a delay
-    pattern.forEach((note, index) => {
-      const delay = index * 500; // Delay between notes
-      const { pitch } = note;
-      const rowIndex = index; // Simplified for this example; adjust based on your actual pattern
-      const dotIndex = 0; // Assuming each note is the first in its row for simplicity
-      setTimeout(() => playNote(pitch, rowIndex, dotIndex), delay);
+    console.log("Random Sequence:", randomSequence);
+    console.log("Mapped to DotConfig:", randomSequenceToDotConfig);
+  
+    // Optionally, play the random sequence
+    randomSequenceToDotConfig.forEach((dot, index) => {
+      setTimeout(() => playNote(dot.pitch, 0, 0), index * 500); // Assuming pitch is enough to play the note
     });
 
+    return randomSequenceToDotConfig; // Return this if needed
+  };
+
+  const handleTestPattern = () => {
     generateRandomSequence(6);
   };
 
-
-  
-  //make some kind of listener to play a note and see if plays back the right note
-
   return (
     <div className="playingRectangle simon">
+      <div className="simonContainer">
       {dotConfig.map((row, rowIndex) => (
         <div key={rowIndex} className="simonRow">
           {row.map((dot, dotIndex) => (
@@ -81,6 +72,7 @@ const PatternSoloPlayingField = (props) => {
           ))}
         </div>
       ))}
+      </div>
       <button className="testButton" onClick={handleTestPattern}>Test Pattern</button>
     </div>
   );

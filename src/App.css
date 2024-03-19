@@ -40,6 +40,12 @@
   justify-content: center;
 }
 
+.simonContainer {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+}
+
 .simonRow {
   display: flex;
   justify-content: center;
