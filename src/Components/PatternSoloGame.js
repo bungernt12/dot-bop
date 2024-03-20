@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import * as Tone from "tone";
+import GameLobby from "./GameLobby";
 
 const synth = new Tone.Synth().toDestination();
 
@@ -41,7 +42,7 @@ const PatternSoloPlayingField = () => {
         // Play the corresponding note with the Tone.js synthesizer
         synth.triggerAttackRelease(pitch, "32n");
         // Schedule deactivation of the dot's visual activation after a delay
-        setTimeout(() => toggleDotActive(rowIndex, dotIndex, false), 200);
+        setTimeout(() => toggleDotActive(rowIndex, dotIndex, false), 250);
         return true; // Stop the search as we've found and processed the dot
       }
       return false;
@@ -147,19 +148,26 @@ const PatternSoloPlayingField = () => {
 
   return (
     <div className={`playingRectangle simon ${correctSequence ? 'success' : ''}`}>
-      {dotConfig.map((row, rowIndex) => (
+      {gameRunning ? 
+      (dotConfig.map((row, rowIndex) => (
         <div key={rowIndex} className="simonRow">
           {row.map((dot, dotIndex) => (
             <div
               key={dotIndex}
               className="dot dotSimon"
-              style={{ filter: activeDots[`${rowIndex}-${dotIndex}`] ? 'brightness(50%)' : 'none', backgroundColor: dot.color }}
+              style={{ filter: activeDots[`${rowIndex}-${dotIndex}`] ? 'brightness(30%)' : 'none', backgroundColor: dot.color }}
               onClick={() => handleDotActivate(rowIndex, dotIndex)}
             ></div>
           ))}
         </div>
-      ))}
-      <button className="testButton" onClick={() => startSimonPatternGame()}>Start Game</button>
+      ))) : (<GameLobby 
+        toggleGameRunning={startSimonPatternGame}
+        gameTitle={"Pattern"}
+        // bopCount={props.bopCount}
+        // gameMode={coOpMode}
+        // setGameMode={setCoOpMode}
+        />)}
+      {/* <button className="testButton" onClick={() => startSimonPatternGame()}>Start Game</button> */}
     </div>
   );
 };
