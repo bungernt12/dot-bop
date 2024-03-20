@@ -61,6 +61,13 @@
 .dotSimon {
   position: relative;
   border: 2px solid rgb(44, 44, 44);
+  transition: .3s ease;
+}
+
+.dotSimon.active {
+  transform: scale(0.9);
+  filter: brightness(50%);
+  transition: .1s ease;
 }
 
 .testButton {

@@ -42,7 +42,7 @@ const PatternSoloPlayingField = () => {
         // Play the corresponding note with the Tone.js synthesizer
         synth.triggerAttackRelease(pitch, "32n");
         // Schedule deactivation of the dot's visual activation after a delay
-        setTimeout(() => toggleDotActive(rowIndex, dotIndex, false), 250);
+        setTimeout(() => toggleDotActive(rowIndex, dotIndex, false), 100);
         return true; // Stop the search as we've found and processed the dot
       }
       return false;
@@ -151,15 +151,17 @@ const PatternSoloPlayingField = () => {
       {gameRunning ? 
       (dotConfig.map((row, rowIndex) => (
         <div key={rowIndex} className="simonRow">
-          {row.map((dot, dotIndex) => (
-            <div
-              key={dotIndex}
-              className="dot dotSimon"
-              style={{ filter: activeDots[`${rowIndex}-${dotIndex}`] ? 'brightness(30%)' : 'none', backgroundColor: dot.color }}
-              onClick={() => handleDotActivate(rowIndex, dotIndex)}
-            ></div>
-          ))}
-        </div>
+        {row.map((dot, dotIndex) => (
+          <div
+            key={dotIndex}
+            className={`dot dotSimon ${activeDots[`${rowIndex}-${dotIndex}`] ? 'active' : ''}`}
+            style={{
+              backgroundColor: dot.color
+            }}
+            onClick={() => handleDotActivate(rowIndex, dotIndex)}
+          ></div>
+        ))}
+      </div>
       ))) : (<GameLobby 
         toggleGameRunning={startSimonPatternGame}
         gameTitle={"Pattern"}
