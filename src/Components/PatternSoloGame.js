@@ -57,73 +57,87 @@ const PatternSoloPlayingField = () => {
     }
   }, [challengePlaying, playAndActivateDot ]);
 
-  //Check game-over conditions
-  useEffect(() => {
-    const triggerGameOver = (type) => {
-        if (type === 'wrongNote') {
-          const flattenedDots = dotConfig.flat(2)
-          const correctDot = flattenedDots[challengeSequence[userEnteredSequence.length - 1]].color;
-          alert(`FAILURE! The next dot was ${correctDot}. Final Score: ${challengeSequence.length-1}`)
-        }
-        if (type === 'tooManyNotes') {
-          alert(`FAILURE! You bopped too many dots! Final Score: ${challengeSequence.length-1}`)
-        }
-        setGameRunning(false)
-        setChallengeSequence([])
-    }
-    
-    if(gameRunning) {
-      const arrayMatchBool = challengeSequence.slice(0, userEnteredSequence.length).every((value, index) => value === userEnteredSequence[index])
-      if (!arrayMatchBool) {
-        triggerGameOver('wrongNote');
-      }
-      if (userEnteredSequence.length > challengeSequence.length) {
-        triggerGameOver('tooManyNotes');
-      }
-      }  ;
-  }, [userEnteredSequence, gameRunning, challengeSequence])
-  
-  
-  
-  // const generateAndPlayRandomSequence = (seqLength) => {
-  //   const flattenedDots = dotConfig.flat(2);
-  //   for (let i = 0; i < seqLength; i++) {
-  //     const randomDotIndex = Math.floor(Math.random() * flattenedDots.length);
-  //     setTimeout(() => playAndActivateDot(flattenedDots[randomDotIndex].pitch), i * 500);
-  //   }
-  // };
-
-    //1. add note to challengeSequence
-  //2. listen to see if userEnteredSequence is the same as challengeSequence
-  //3. repeat
- 
-  const  addNoteToChallengeSequenceAndActivateDot = () => {
+  const  addNoteToChallengeSequenceAndActivateDot = useCallback(() => {
     setChallengePlaying(true);
     const flattenedDots = dotConfig.flat(2);
     const randomDotIndex = Math.floor(Math.random() * flattenedDots.length);
     setChallengeSequence((prev) => [...prev, randomDotIndex])
-  };
+  }, []);
 
   useEffect(() => {
+    const triggerGameOver = (type) => {
+      const flattenedDots = dotConfig.flat();
+      const correctDot = flattenedDots[challengeSequence[userEnteredSequence.length - 1]].color;
+      const message = `FAILURE! The next dot was ${correctDot}. Final Score: ${challengeSequence.length - 1}`
+        
+      alert(message);
+      setGameRunning(false);
+      setChallengeSequence([]);
+      setUserEnteredSequence([]); // Clear user sequence to allow for a new game start
+    };
+    
+    if (gameRunning) {
+      const sequenceCorrectSoFar = challengeSequence.slice(0, userEnteredSequence.length)
+                                .every((value, index) => value === userEnteredSequence[index]);
+  
+      if (sequenceCorrectSoFar && userEnteredSequence.length === challengeSequence.length) {
+        // If the user has correctly entered all notes in the sequence, add a new note
+        setTimeout(() => addNoteToChallengeSequenceAndActivateDot(), 1000);
+      } else if (!sequenceCorrectSoFar) {
+        triggerGameOver('wrongNote');
+      } 
+      else if (userEnteredSequence.length > challengeSequence.length) {
+        triggerGameOver('tooManyNotes');
+      }
+    }
+  }, [userEnteredSequence, gameRunning, challengeSequence, addNoteToChallengeSequenceAndActivateDot]);
+  
+  // //Check game-over or add-dot conditions
+  // useEffect(() => {
+  //   const triggerGameOver = (type) => {
+  //       if (type === 'wrongNote') {
+  //         const flattenedDots = dotConfig.flat(2)
+  //         const correctDot = flattenedDots[challengeSequence[userEnteredSequence.length - 1]].color;
+  //         alert(`FAILURE! The next dot was ${correctDot}. Final Score: ${challengeSequence.length-1}`)
+  //       }
+  //       if (type === 'tooManyNotes') {
+  //         alert(`FAILURE! You bopped too many dots! Final Score: ${challengeSequence.length-1}`)
+  //       }
+  //       setGameRunning(false)
+  //       setChallengeSequence([])
+  //   }
+    
+  //   if(gameRunning) {
+  //     //trigger next dot addition
+  //     if (challengeSequence == userEnteredSequence) {
+  //       setTimeout(() => addNoteToChallengeSequenceAndActivateDot(), 1000);
+  //     } 
+  //     const arrayMatchBool = challengeSequence.slice(0, userEnteredSequence.length).every((value, index) => value === userEnteredSequence[index])
+  //     if (!arrayMatchBool) {
+  //       triggerGameOver('wrongNote');
+  //     }
+  //     if (userEnteredSequence.length > challengeSequence.length) {
+  //       triggerGameOver('tooManyNotes');
+  //     }
+  //     }  ;
+  // }, [userEnteredSequence, gameRunning, challengeSequence])
+ 
+
+  useEffect(() => {
+    const challengeNoteDuration = 400;
     challengeSequence.forEach((challengeDot, iterationIndex) => {
       const flattenedDots = dotConfig.flat(2);
-      setTimeout(() => playAndActivateDot(flattenedDots[challengeDot].pitch), iterationIndex * 500)
+      setTimeout(() => playAndActivateDot(flattenedDots[challengeDot].pitch), iterationIndex * challengeNoteDuration)
     })
-    setTimeout(() => setChallengePlaying(false), challengeSequence.length * 500)
+    setTimeout(() => setChallengePlaying(false), challengeSequence.length * challengeNoteDuration)
     setUserEnteredSequence([])
   }, [challengeSequence, playAndActivateDot])
 
   const startSimonPatternGame = () => {
     setGameRunning(true);
     addNoteToChallengeSequenceAndActivateDot();
-    //play challenge sequence
-    // with every click, check to see if the user entered sequence 
-    //matches the challenge sequence up to that point.
+    
   }
-
-  // useEffect(() => {
-
-  // }, [challengeSequence])
 
   return (
     <div className="playingRectangle simon">
