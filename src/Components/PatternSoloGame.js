@@ -67,7 +67,13 @@ const PatternSoloPlayingField = () => {
       // console.log(arraysMatchUpToNthIndex(array1, array2, n))
       
       const arrayMatchBool = challengeSequence.slice(0, userEnteredSequence.length).every((value, index) => value === userEnteredSequence[index])
-      
+      if (!arrayMatchBool) {
+        const flattenedDots = dotConfig.flat(2)
+        const correctDot = flattenedDots[challengeSequence[userEnteredSequence.length - 1]].color;
+        alert(`FAILURE! The next note was ${correctDot}. Final Score: ${challengeSequence.length-1}`)
+        setGameRunning(false)
+      }
+    
       console.log("User Entered Sequence", userEnteredSequence);
       console.log("Challenge Array up through guess", arrayMatchBool);
       
