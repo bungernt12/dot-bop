@@ -18,13 +18,29 @@ const dotConfig = [
   [{ color: "purple", pitch: "C5" }],
 ];
 
+const playSuccessJingle = () => {
+  const now = Tone.now()
+  synth.triggerAttackRelease("G3", "32n", now);
+  synth.triggerAttackRelease("C4", "32n", now + .1);
+
+}
+
+const playFailureJingle = () => {
+  const now = Tone.now()
+  synth.triggerAttackRelease("G3", "32n", now);
+  synth.triggerAttackRelease("Gb3", "32n", now + .1);
+
+}
+
 const PatternSoloPlayingField = () => {
   const [activeDots, setActiveDots] = useState({});
   const [challengeSequence, setChallengeSequence] = useState([]);
   const [userEnteredSequence, setUserEnteredSequence] = useState([]);
   const [challengePlaying, setChallengePlaying] = useState(false);
   const [gameRunning, setGameRunning] = useState(false);
-  const [correctSequence, setCorrectSequence] = useState(false);
+  const [correctSequenceBoolBool, setCorrectSequenceBool] = useState(false);
+  // const [wrongSequenceBool, setWrongSequenceBool] = useState(false);
+  // const [gameOverMessage, setGameOverMessage] = useState('')
 
   // Function to toggle a dot's active state
   const toggleDotActive = (rowIndex, dotIndex, isActive) => {
@@ -60,7 +76,6 @@ const PatternSoloPlayingField = () => {
   }, [challengePlaying, playAndActivateDot ]);
 
   const  addNoteToChallengeSequenceAndActivateDot = useCallback(() => {
-    setChallengePlaying(true);
     const flattenedDots = dotConfig.flat(2);
     const randomDotIndex = Math.floor(Math.random() * flattenedDots.length);
     setChallengeSequence((prev) => [...prev, randomDotIndex])
@@ -70,8 +85,12 @@ const PatternSoloPlayingField = () => {
     const triggerGameOver = (type) => {
       const flattenedDots = dotConfig.flat();
       const correctDot = flattenedDots[challengeSequence[userEnteredSequence.length - 1]].color;
-      const message = `FAILURE! The next dot was ${correctDot}. Final Score: ${challengeSequence.length - 1}`
-        
+      const message = `FAILURE! The next dot was ${correctDot}. Final Score: ${challengeSequence.length - 1}`; 
+      playFailureJingle();
+      //not using the wrong sequence bool right now, just relying on alert message.
+      // setWrongSequenceBool(true)
+      // setTimeout(() => setWrongSequenceBool(false), 300)
+      
       alert(message);
       setGameRunning(false);
       setChallengeSequence([]);
@@ -84,9 +103,11 @@ const PatternSoloPlayingField = () => {
   
       if (sequenceCorrectSoFar && userEnteredSequence.length === challengeSequence.length) {
         // If the user has correctly entered all notes in the sequence, add a new note
-        setCorrectSequence(true)
+        setChallengePlaying(true);
+        setCorrectSequenceBool(true)
         setTimeout(() => addNoteToChallengeSequenceAndActivateDot(), 1000);
-        setTimeout(() => setCorrectSequence(false), 300)
+        setTimeout(() => setCorrectSequenceBool(false), 300)
+        setTimeout(() => playSuccessJingle(), 300);
       } else if (!sequenceCorrectSoFar) {
         triggerGameOver('wrongNote');
       } 
@@ -147,7 +168,7 @@ const PatternSoloPlayingField = () => {
   }
 
   return (
-    <div className={`playingRectangle simon ${correctSequence ? 'success' : ''}`}>
+    <div className={`playingRectangle simon ${correctSequenceBoolBool ? 'success' : ''}`}>
       {gameRunning ? 
       (dotConfig.map((row, rowIndex) => (
         <div key={rowIndex} className="simonRow">
