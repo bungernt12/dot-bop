@@ -19,9 +19,10 @@ const dotConfig = [
 
 const PatternSoloPlayingField = () => {
   const [activeDots, setActiveDots] = useState({});
-  const [challengeSequence, setChallengeSequence] = useState([0]);
+  const [challengeSequence, setChallengeSequence] = useState([]);
   const [userEnteredSequence, setUserEnteredSequence] = useState([]);
   const [challengePlaying, setChallengePlaying] = useState(false);
+  const [gameRunning, setGameRunning] = useState(false);
 
   // Function to toggle a dot's active state
   const toggleDotActive = (rowIndex, dotIndex, isActive) => {
@@ -56,9 +57,25 @@ const PatternSoloPlayingField = () => {
     }
   }, [challengePlaying, playAndActivateDot ]);
 
+  //check match to Challenge sequence
   useEffect(() => {
-    console.log("userEnteredSequence", userEnteredSequence);
-  }, [userEnteredSequence])
+    console.log("Challenge Sequence", challengeSequence);
+    if(gameRunning) {
+      // const arraysMatchUpToNthIndex = (arr1, arr2, n) => {
+      //   return arr1.slice(0, n).every((value, index) => value === arr2[index]);
+      // };
+      // console.log(arraysMatchUpToNthIndex(array1, array2, n))
+      
+      const arrayMatchBool = challengeSequence.slice(0, userEnteredSequence.length).every((value, index) => value === userEnteredSequence[index])
+      
+      console.log("User Entered Sequence", userEnteredSequence);
+      console.log("Challenge Array up through guess", arrayMatchBool);
+      
+      }  ;
+  }, [userEnteredSequence, gameRunning, challengeSequence])
+  
+  
+  
   // const generateAndPlayRandomSequence = (seqLength) => {
   //   const flattenedDots = dotConfig.flat(2);
   //   for (let i = 0; i < seqLength; i++) {
@@ -76,14 +93,19 @@ const PatternSoloPlayingField = () => {
     const flattenedDots = dotConfig.flat(2);
     const randomDotIndex = Math.floor(Math.random() * flattenedDots.length);
     setChallengeSequence((prev) => [...prev, randomDotIndex])
+  };
+
+  useEffect(() => {
     challengeSequence.forEach((challengeDot, iterationIndex) => {
+      const flattenedDots = dotConfig.flat(2);
       setTimeout(() => playAndActivateDot(flattenedDots[challengeDot].pitch), iterationIndex * 500)
     })
     setTimeout(() => setChallengePlaying(false), challengeSequence.length * 500)
     setUserEnteredSequence([])
-  };
+  }, [challengeSequence, playAndActivateDot])
 
   const startSimonPatternGame = () => {
+    setGameRunning(true);
     addNoteToChallengeSequenceAndActivateDot();
     //play challenge sequence
     console.log(challengeSequence)
@@ -109,7 +131,7 @@ const PatternSoloPlayingField = () => {
           ))}
         </div>
       ))}
-      <button className="testButton" onClick={() => startSimonPatternGame()}>Test Generate Challenge</button>
+      <button className="testButton" onClick={() => startSimonPatternGame()}>Add Note to Pattern</button>
     </div>
   );
 };
