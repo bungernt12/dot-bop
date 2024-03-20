@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import * as Tone from "tone";
 
 const synth = new Tone.Synth().toDestination();
@@ -19,6 +19,9 @@ const dotConfig = [
 
 const PatternSoloPlayingField = () => {
   const [activeDots, setActiveDots] = useState({});
+  const [challengeSequence, setChallengeSequence] = useState([0]);
+  const [userEnteredSequence, setUserEnteredSequence] = useState([]);
+  const [challengePlaying, setChallengePlaying] = useState(false);
 
   // Function to toggle a dot's active state
   const toggleDotActive = (rowIndex, dotIndex, isActive) => {
@@ -27,7 +30,7 @@ const PatternSoloPlayingField = () => {
   };
 
   // Plays a note and activates the corresponding dot visually
-  const playAndActivateDot = (pitch) => {
+  const playAndActivateDot = useCallback((pitch) => {
     // Iterates over each row and dot to find the one with the matching pitch
     dotConfig.some((row, rowIndex) => row.some((dot, dotIndex) => {
       if (dot.pitch === pitch) {
@@ -41,13 +44,21 @@ const PatternSoloPlayingField = () => {
       }
       return false;
     }));
-  };
+  }, []);
 
-  const handleDotActivate = (rowIndex, dotIndex) => {
-    const { pitch } = dotConfig[rowIndex][dotIndex];
-    playAndActivateDot(pitch);
-  };
+  const handleDotActivate = useCallback((rowIndex, dotIndex) => {
+    if (challengePlaying) return; // Ignore clicks while challenge is playing
+    const dot = dotConfig[rowIndex][dotIndex];
+    playAndActivateDot(dot.pitch);
+    // This adjustment ensures the first dot click is added to the sequence
+    if (!challengePlaying) {
+      setUserEnteredSequence(prev => [...prev, dotConfig.flat().indexOf(dot)]);
+    }
+  }, [challengePlaying, playAndActivateDot ]);
 
+  useEffect(() => {
+    console.log("userEnteredSequence", userEnteredSequence);
+  }, [userEnteredSequence])
   // const generateAndPlayRandomSequence = (seqLength) => {
   //   const flattenedDots = dotConfig.flat(2);
   //   for (let i = 0; i < seqLength; i++) {
@@ -59,16 +70,17 @@ const PatternSoloPlayingField = () => {
     //1. add note to challengeSequence
   //2. listen to see if userEnteredSequence is the same as challengeSequence
   //3. repeat
-  const [challengeSequence, setChallengeSequence] = useState([0])
-  const userEnteredSequence = []
-
+ 
   const  addNoteToChallengeSequenceAndActivateDot = () => {
+    setChallengePlaying(true);
     const flattenedDots = dotConfig.flat(2);
     const randomDotIndex = Math.floor(Math.random() * flattenedDots.length);
     setChallengeSequence((prev) => [...prev, randomDotIndex])
     challengeSequence.forEach((challengeDot, iterationIndex) => {
       setTimeout(() => playAndActivateDot(flattenedDots[challengeDot].pitch), iterationIndex * 500)
     })
+    setTimeout(() => setChallengePlaying(false), challengeSequence.length * 500)
+    setUserEnteredSequence([])
   };
 
   const startSimonPatternGame = () => {
@@ -78,6 +90,10 @@ const PatternSoloPlayingField = () => {
     // with every click, check to see if the user entered sequence 
     //matches the challenge sequence up to that point.
   }
+
+  // useEffect(() => {
+
+  // }, [challengeSequence])
 
   return (
     <div className="playingRectangle simon">
