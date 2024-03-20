@@ -23,6 +23,7 @@ const PatternSoloPlayingField = () => {
   const [userEnteredSequence, setUserEnteredSequence] = useState([]);
   const [challengePlaying, setChallengePlaying] = useState(false);
   const [gameRunning, setGameRunning] = useState(false);
+  const [correctSequence, setCorrectSequence] = useState(false);
 
   // Function to toggle a dot's active state
   const toggleDotActive = (rowIndex, dotIndex, isActive) => {
@@ -82,7 +83,9 @@ const PatternSoloPlayingField = () => {
   
       if (sequenceCorrectSoFar && userEnteredSequence.length === challengeSequence.length) {
         // If the user has correctly entered all notes in the sequence, add a new note
+        setCorrectSequence(true)
         setTimeout(() => addNoteToChallengeSequenceAndActivateDot(), 1000);
+        setTimeout(() => setCorrectSequence(false), 300)
       } else if (!sequenceCorrectSoFar) {
         triggerGameOver('wrongNote');
       } 
@@ -134,13 +137,16 @@ const PatternSoloPlayingField = () => {
   }, [challengeSequence, playAndActivateDot])
 
   const startSimonPatternGame = () => {
+    if (gameRunning) {
+      return;
+    }
     setGameRunning(true);
     addNoteToChallengeSequenceAndActivateDot();
     
   }
 
   return (
-    <div className="playingRectangle simon">
+    <div className={`playingRectangle simon ${correctSequence ? 'success' : ''}`}>
       {dotConfig.map((row, rowIndex) => (
         <div key={rowIndex} className="simonRow">
           {row.map((dot, dotIndex) => (
@@ -153,7 +159,7 @@ const PatternSoloPlayingField = () => {
           ))}
         </div>
       ))}
-      <button className="testButton" onClick={() => startSimonPatternGame()}>Add Note to Pattern</button>
+      <button className="testButton" onClick={() => startSimonPatternGame()}>Start Game</button>
     </div>
   );
 };
