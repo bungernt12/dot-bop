@@ -19,6 +19,7 @@ const dotConfig = [
 const PatternSoloPlayingField = () => {
   const [activeDots, setActiveDots] = useState({});
   const [challengePlaying, setChallengePlaying] = useState(false);
+  // Initialize challengeSequence with an empty array for a clear start
   const [challengeSequence, setChallengeSequence] = useState([]);
   const [userEnteredSequence, setUserEnteredSequence] = useState([]);
 
@@ -43,55 +44,59 @@ const PatternSoloPlayingField = () => {
     if (challengePlaying) return; // Ignore clicks while challenge is playing
     const dot = dotConfig[rowIndex][dotIndex];
     playAndActivateDot(dot.pitch);
+    // This adjustment ensures the first dot click is added to the sequence
     if (!challengePlaying) {
-      setUserEnteredSequence(prev => [...prev, dotConfig.flat(2).indexOf(dot)]);
-      // for some reason the first dot click isn't added to the userEnteredSequence
-      console.log(userEnteredSequence);
+      setUserEnteredSequence(prev => [...prev, dotConfig.flat().indexOf(dot)]);
     }
-  }, [challengePlaying, playAndActivateDot, userEnteredSequence]);
-
-  useEffect(() => {
-    console.log(userEnteredSequence);
-  }, [userEnteredSequence])
+  }, [challengePlaying, playAndActivateDot]);
 
   const addChallengeNoteAndPlay = useCallback(() => {
-    const randomDotIndex = Math.floor(Math.random() * dotConfig.flat(2).length);
-    const updatedSequence = [...challengeSequence, randomDotIndex];
-    setChallengeSequence(updatedSequence);
+    setChallengePlaying(true);
+    const randomDotIndex = Math.floor(Math.random() * dotConfig.flat().length);
+    setChallengeSequence(prev => [...prev, randomDotIndex]);
 
+    // Ensure that the updated sequence is played
+    const updatedSequence = [...challengeSequence, randomDotIndex];
     updatedSequence.forEach((index, iterationIndex) => {
       setTimeout(() => {
-        const dot = dotConfig.flat(2)[index];
+        const dot = dotConfig.flat()[index];
         playAndActivateDot(dot.pitch);
       }, iterationIndex * 500);
     });
 
     setTimeout(() => {
       setChallengePlaying(false);
-      setUserEnteredSequence([]);
-    }, updatedSequence.length * 500 + 500);
+    }, updatedSequence.length * 500);
   }, [challengeSequence, playAndActivateDot]);
+  
+  const checkUserSequence = useCallback(() => {
+    const isMatch = userEnteredSequence.every((val, index) => val === challengeSequence[index]);
+    if (!isMatch) {
+      alert('Sequence incorrect. Try again!');
+      // Reset for a new game or retry
+      setChallengeSequence([]);
+      setUserEnteredSequence([]);
+      setChallengePlaying(false);
+    } else if (userEnteredSequence.length && userEnteredSequence.length === challengeSequence.length) {
+      alert('Correct! Next note added.');
+      setUserEnteredSequence([]); // Clear user sequence for the next round
+      addChallengeNoteAndPlay(); // Automatically add a new note and play the sequence
+    }
+  }, [userEnteredSequence, challengeSequence, addChallengeNoteAndPlay]);
+
+  useEffect(() => {
+    if (challengePlaying) {
+      checkUserSequence();
+    }
+  }, [userEnteredSequence, challengePlaying, checkUserSequence]);
+
+
 
   const startGame = useCallback(() => {
-    setChallengePlaying(true);
-    setChallengeSequence([]);
-    setUserEnteredSequence([]);
-    addChallengeNoteAndPlay();
-  }, [addChallengeNoteAndPlay]);
-
-  // Check user sequence against the challenge sequence
-  useEffect(() => {
-    if (challengePlaying && userEnteredSequence.length) {
-      const isMatch = userEnteredSequence.every((val, index) => val === challengeSequence[index]);
-      if (!isMatch || userEnteredSequence.length === challengeSequence.length) {
-        setChallengePlaying(false);
-        if (!isMatch) alert('Sequence incorrect. Try again!');
-        if (userEnteredSequence.length === challengeSequence.length) alert('Correct! Starting new challenge.');
-        setUserEnteredSequence([]);
-        setChallengeSequence([]); // Optionally clear or expand for the next challenge
-      }
+    if (!challengePlaying && challengeSequence.length === 0) {
+      addChallengeNoteAndPlay();
     }
-  }, [userEnteredSequence, challengeSequence, challengePlaying]);
+  }, [addChallengeNoteAndPlay, challengePlaying, challengeSequence.length]);
 
   return (
     <div className="playingRectangle simon">
