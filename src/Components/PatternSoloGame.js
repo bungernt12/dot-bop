@@ -57,26 +57,29 @@ const PatternSoloPlayingField = () => {
     }
   }, [challengePlaying, playAndActivateDot ]);
 
-  //check match to Challenge sequence
+  //Check game-over conditions
   useEffect(() => {
-    console.log("Challenge Sequence", challengeSequence);
+    const triggerGameOver = (type) => {
+        if (type === 'wrongNote') {
+          const flattenedDots = dotConfig.flat(2)
+          const correctDot = flattenedDots[challengeSequence[userEnteredSequence.length - 1]].color;
+          alert(`FAILURE! The next dot was ${correctDot}. Final Score: ${challengeSequence.length-1}`)
+        }
+        if (type === 'tooManyNotes') {
+          alert(`FAILURE! You bopped too many dots! Final Score: ${challengeSequence.length-1}`)
+        }
+        setGameRunning(false)
+        setChallengeSequence([])
+    }
+    
     if(gameRunning) {
-      // const arraysMatchUpToNthIndex = (arr1, arr2, n) => {
-      //   return arr1.slice(0, n).every((value, index) => value === arr2[index]);
-      // };
-      // console.log(arraysMatchUpToNthIndex(array1, array2, n))
-      
       const arrayMatchBool = challengeSequence.slice(0, userEnteredSequence.length).every((value, index) => value === userEnteredSequence[index])
       if (!arrayMatchBool) {
-        const flattenedDots = dotConfig.flat(2)
-        const correctDot = flattenedDots[challengeSequence[userEnteredSequence.length - 1]].color;
-        alert(`FAILURE! The next note was ${correctDot}. Final Score: ${challengeSequence.length-1}`)
-        setGameRunning(false)
+        triggerGameOver('wrongNote');
       }
-    
-      console.log("User Entered Sequence", userEnteredSequence);
-      console.log("Challenge Array up through guess", arrayMatchBool);
-      
+      if (userEnteredSequence.length > challengeSequence.length) {
+        triggerGameOver('tooManyNotes');
+      }
       }  ;
   }, [userEnteredSequence, gameRunning, challengeSequence])
   
@@ -114,7 +117,6 @@ const PatternSoloPlayingField = () => {
     setGameRunning(true);
     addNoteToChallengeSequenceAndActivateDot();
     //play challenge sequence
-    console.log(challengeSequence)
     // with every click, check to see if the user entered sequence 
     //matches the challenge sequence up to that point.
   }
