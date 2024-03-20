@@ -1,8 +1,11 @@
 import React, { useState, useCallback, useEffect } from "react";
 import * as Tone from "tone";
 import GameLobby from "./GameLobby";
+// import MusicPlayer from "./BackgroundMusic";
 
 const synth = new Tone.Synth().toDestination();
+
+
 
 // Realign dotConfig for the correct visual orientation
 const dotConfig = [
@@ -169,6 +172,7 @@ const PatternSoloPlayingField = () => {
 
   return (
     <div className={`playingRectangle simon ${correctSequenceBoolBool ? 'success' : ''}`}>
+      {/* <MusicPlayer /> */}
       {gameRunning ? 
       (dotConfig.map((row, rowIndex) => (
         <div key={rowIndex} className="simonRow">
