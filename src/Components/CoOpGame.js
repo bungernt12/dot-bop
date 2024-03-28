@@ -49,6 +49,7 @@ const PlayingField = (props) => {
   const toggleGameRunning = () => {
     props.setGameRunning((prev) => !prev);
     props.setBopCount(0);
+    props.setDisplayGameLobby(false);
     console.log(coOpMode);
   };
 
@@ -76,7 +77,7 @@ const PlayingField = (props) => {
             :D
           </button>
         </section>
-      ) : (
+      ) : props.displayGameLobby ? (
         <GameLobby
           toggleGameRunning={toggleGameRunning}
           gameTitle={"Co-Op"}
@@ -84,6 +85,8 @@ const PlayingField = (props) => {
           gameMode={coOpMode}
           setGameMode={setCoOpMode}
         />
+      ) : (
+        <h1 className="gameOverBopCountDisplay">Bops: {props.bopCount}</h1>
       )}
     </div>
   );

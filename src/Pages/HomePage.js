@@ -6,15 +6,17 @@ const HomePage = (props) => {
     <div className="App-header">
       <h1>BOP DOT</h1>
       <h2>Game Modes</h2>
-      <Link to={"/CoOp"}>
-        <div className="modeButton">Co-Op</div>
-      </Link>
-      <Link to={"/Battle"}>
-        <div className="modeButton">Battle</div>
-      </Link>
-      <Link to={"/PatternSolo"}>
-        <div className="modeButton">Pattern</div>
-      </Link>
+      <div className="linkContainerDiv">
+        <Link to={"/CoOp"}>
+          <div className="modeButton">Co-Op</div>
+        </Link>
+        <Link to={"/Battle"}>
+          <div className="modeButton">Battle</div>
+        </Link>
+        <Link to={"/PatternSolo"}>
+          <div className="modeButton">Pattern</div>
+        </Link>
+      </div>
     </div>
   );
 };

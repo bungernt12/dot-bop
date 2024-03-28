@@ -9,6 +9,7 @@ function CoOp() {
   const [gameRunning, setGameRunning] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const gameLength = 20;
+  const [displayGameLobby, setDisplayGameLobby] = useState(true);
 
   return (
     <div className="App">
@@ -20,6 +21,7 @@ function CoOp() {
           gameOver={gameOver}
           setGameOver={setGameOver}
           gameLength={gameLength}
+          setDisplayGameLobby={setDisplayGameLobby}
         />
         <PlayingField
           bopCount={bopCount}
@@ -27,6 +29,8 @@ function CoOp() {
           gameRunning={gameRunning}
           setGameRunning={setGameRunning}
           gameLength={gameLength}
+          displayGameLobby={displayGameLobby}
+          setDisplayGameLobby={setDisplayGameLobby}
         />
       </div>
     </div>
