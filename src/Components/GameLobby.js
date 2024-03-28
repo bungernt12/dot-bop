@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const GameLobby = (props) => {
+  const [displayGameLobbyButtons, setDisplayGameLobbyButtons] = useState(false);
+
   const handleGameModeChange = (e) => {
     props.setGameMode(e.target.value);
   };
@@ -11,6 +13,12 @@ const GameLobby = (props) => {
   const handleGoHome = () => {
     navigate("/");
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setDisplayGameLobbyButtons(true);
+    }, 1000);
+  }, []);
 
   return (
     <div className="gameLobby">
@@ -56,14 +64,23 @@ const GameLobby = (props) => {
         ""
       )}
       {/* <h3>Bops: {props.bopCount}</h3> */}
-      <button className="goHomeButton button" onClick={handleGoHome}>
-        Home Page
-      </button>
-      <br />
-      <br />
-      <button className="startButton button" onClick={props.toggleGameRunning}>
-        Start Game
-      </button>
+      {displayGameLobbyButtons ? (
+        <div className="gameLobbyButtons">
+          <button className="goHomeButton button" onClick={handleGoHome}>
+            Home Page
+          </button>
+          <br />
+          <br />
+          <button
+            className="startButton button"
+            onClick={props.toggleGameRunning}
+          >
+            Start Game
+          </button>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
