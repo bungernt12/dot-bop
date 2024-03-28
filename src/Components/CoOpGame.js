@@ -9,32 +9,39 @@ const PlayingField = (props) => {
   const [coOpMode, setCoOpMode] = useState("Random");
 
   const bopSoundObj = new Audio(bopSound);
-  const squareSize = { width: 300, height: 500 };
+  // const squareSize = { width: 300, height: 500 };
 
   const dotClickHandle = () => {
     bopSoundObj.play();
+    console.log(window.innerWidth);
 
     // const oldTop = dotLocation.top;
 
     let newTop;
-    let newLeft = Math.random() * (squareSize.width - 70);
+    let newLeft = Math.random() * 100;
+
+    //now I want to code the same logic below but in terms of percentage of the screen
 
     // Ensure the new position crosses the boundary for Ping-Pong mode
     if (coOpMode === "Ping-Pong") {
       do {
-        newTop = Math.random() * (squareSize.height - 70);
+        newTop = Math.random() * 100;
       } while (
-        (dotLocation.top <= 250 && newTop <= 250) ||
-        (dotLocation.top > 250 && newTop > 250) ||
-        (newTop > 180 && newTop < 250)
+        (dotLocation.top <= 50 && newTop <= 50) ||
+        (dotLocation.top > 50 && newTop > 50) ||
+        (newTop > 30 && newTop < 50) ||
+        newTop > 82
       );
     } else {
       do {
-        newTop = Math.random() * (squareSize.height - 70);
-      } while (newTop > 180 && newTop < 250); // Avoids the middle section only for non-Ping-Pong mode
+        newTop = Math.random() * 100;
+      } while ((newTop > 30 && newTop < 50) || newTop > 82); // Avoids the middle section only for non-Ping-Pong mode
     }
 
-    setDotLocation({ top: newTop, left: newLeft });
+    setDotLocation({
+      top: newTop,
+      left: (newLeft / 100) * (window.innerWidth * 0.65),
+    });
     newTop > 225 ? setDotColor("darkcyan") : setDotColor("darkgreen");
     props.setBopCount((prev) => prev + 1);
   };
@@ -49,25 +56,26 @@ const PlayingField = (props) => {
     // console.log("New dot location:", dotLocation);
     //whenever the dot location changes, I want the dotSide to update.
     dotLocation.top > 225 ? setDotSide("bottom") : setDotSide("top");
+    console.log("innerWidth adjusted", dotLocation);
   }, [dotLocation, dotSide]);
 
   return (
     <div className="playingRectangle">
       {props.gameRunning ? (
-        <div>
+        <section>
           <div className="centerLine"></div>
           <button
             className="dot dotBop"
             onClick={dotClickHandle}
             style={{
-              top: `${dotLocation.top}px`,
+              top: `${dotLocation.top}%`,
               left: `${dotLocation.left}px`,
               backgroundColor: dotColor,
             }}
           >
             :D
           </button>
-        </div>
+        </section>
       ) : (
         <GameLobby
           toggleGameRunning={toggleGameRunning}

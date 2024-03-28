@@ -12,7 +12,7 @@ function CoOp() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <div className="App-header">
         <ScoreBoard
           bopCount={bopCount}
           gameRunning={gameRunning}
@@ -28,7 +28,7 @@ function CoOp() {
           setGameRunning={setGameRunning}
           gameLength={gameLength}
         />
-      </header>
+      </div>
     </div>
   );
 }

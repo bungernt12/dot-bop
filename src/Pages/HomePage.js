@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const HomePage = (props) => {
   return (
-    <div>
+    <div className="App-header">
       <h1>BOP DOT</h1>
       <h2>Game Modes</h2>
       <Link to={"/CoOp"}>
