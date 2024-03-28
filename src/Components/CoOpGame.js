@@ -86,7 +86,10 @@ const PlayingField = (props) => {
           setGameMode={setCoOpMode}
         />
       ) : (
-        <h1 className="gameOverBopCountDisplay">Bops: {props.bopCount}</h1>
+        <h1 className="gameOverBopCountDisplay">
+          Bops: <br></br>
+          {props.bopCount}
+        </h1>
       )}
     </div>
   );
